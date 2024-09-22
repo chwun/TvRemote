@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  api:
+    image: tv-remote-api:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 9510:8080
