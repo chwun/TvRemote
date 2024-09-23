@@ -37,6 +37,11 @@ public class PhilipsTvAccess : IPhilipsTvAccess
         return await SendCommand(["key", "source"]);
     }
 
+    public async Task<bool> SendBack()
+    {
+        return await SendCommand(["key", "back"]);
+    }
+
     public async Task<bool> SendOk()
     {
         return await SendCommand(["key", "ok"]);

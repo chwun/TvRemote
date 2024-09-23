@@ -8,6 +8,7 @@ public interface IPhilipsTvAccess
     Task<bool> SendPowerOff();
     Task<bool> SendHome();
     Task<bool> SendSource();
+    Task<bool> SendBack();
     Task<bool> SendOk();
     Task<bool> SendUp();
     Task<bool> SendDown();

@@ -7,6 +7,17 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IPhilipsTvAccess, PhilipsTvAccess>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "homeAPI-dashboard",
+                      policy =>
+                      {
+                          policy.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                      });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -15,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("homeAPI-dashboard");
 
 app.MapGet("/api/test", () =>
 {
@@ -45,6 +58,13 @@ app.MapPost("/api/home", async (IPhilipsTvAccess tvAccess) =>
 app.MapPost("/api/source", async (IPhilipsTvAccess tvAccess) =>
 {
     bool success = await tvAccess.SendSource();
+
+    return success ? Results.Ok() : Results.StatusCode(StatusCodes.Status502BadGateway);
+});
+
+app.MapPost("/api/nav/back", async (IPhilipsTvAccess tvAccess) =>
+{
+    bool success = await tvAccess.SendBack();
 
     return success ? Results.Ok() : Results.StatusCode(StatusCodes.Status502BadGateway);
 });
