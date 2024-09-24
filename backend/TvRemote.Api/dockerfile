@@ -1,0 +1,21 @@
+# build image
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /source
+
+COPY . ./
+RUN dotnet publish -c Release -o /app --self-contained --runtime linux-arm64
+
+# runtime image
+# FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM --platform=linux/arm64/v8 arm64v8/python:3-slim
+WORKDIR /app
+
+COPY --from=build-env /app .
+
+RUN pip install 'philipstv[cli]'
+
+# RUN apt-get update && apt-get install -y python3 pipx
+# RUN pipx install 'philipstv[cli]'
+
+# ENTRYPOINT ["dotnet", "TvRemote.Api.dll"]
+ENTRYPOINT ["/app/TvRemote.Api"]
